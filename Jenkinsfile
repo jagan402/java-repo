@@ -1,34 +1,26 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/your-username/your-repo.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Building...'
-                // Example: sh 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // Example: sh 'mvn test'
-            }
-        }
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'main',
+            credentialsId: 'mygit',
+            url: 'https://github.com/jagan402/java-repo.git'
+      }
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully.'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
+    stage('Build') {
+      steps { echo 'Building...' }
     }
+
+    stage('Test') {
+      steps { echo 'Running tests...' }
+    }
+  }
+
+  post {
+    success { echo 'Pipeline completed successfully.' }
+    failure { echo 'Pipeline failed.' }
+  }
 }
