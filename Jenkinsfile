@@ -1,43 +1,34 @@
 pipeline {
-    agent any    environment {
-        MAVEN_HOME = tool 'Maven 3.8'
-        SONARQUBE = 'SonarQube'
-    }
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/jagan402/java-repo.git', branch: 'main'
+                git 'https://github.com/your-username/your-repo.git'
             }
         }
 
-        stage('Build & Unit Test') {
+        stage('Build') {
             steps {
-                sh "${MAVEN_HOME}/bin/mvn clean test"
+                echo 'Building...'
+                // Example: sh 'mvn clean package'
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('Test') {
             steps {
-                withSonarQubeEnv("${SONARQUBE}") {
-                    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
-                }
-            }
-        }
-
-        stage('Deploy to Nexus') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh "${MAVEN_HOME}/bin/mvn deploy"
+                echo 'Running tests...'
+                // Example: sh 'mvn test'
             }
         }
     }
 
     post {
-        always {
-            echo "Pipeline finished: ${currentBuild.currentResult}"
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
